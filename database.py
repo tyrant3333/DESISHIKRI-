@@ -1,4 +1,4 @@
-# database.py - Fully Fixed for Railway
+# database.py - Fully Fixed for Railway (No Syntax Error)
 import os
 import datetime
 import random
@@ -18,10 +18,9 @@ except ImportError:
 
 # ============ CONFIGURATION ============
 MONGODB_URI = os.environ.get("MONGODB_URI", "")
-# Default to false for Railway - JSON mode is more reliable
 USE_MONGODB = os.environ.get("USE_MONGODB", "false").lower() == "true"
 
-# Validate MongoDB URI - if it's the default placeholder, disable MongoDB
+# Validate MongoDB URI
 if MONGODB_URI and "Tyr6hij:gufutihhh" in MONGODB_URI:
     USE_MONGODB = False
     print("⚠️ Using default MongoDB URI placeholder - switching to JSON storage")
@@ -115,16 +114,14 @@ async def get_mongo_db():
     
     if _mongo_client is None:
         try:
-            # Add timeout and retry settings for Railway
             _mongo_client = AsyncIOMotorClient(
                 MONGODB_URI,
-                serverSelectionTimeoutMS=5000,  # 5 second timeout
+                serverSelectionTimeoutMS=5000,
                 connectTimeoutMS=5000,
                 socketTimeoutMS=5000,
                 retryWrites=False,
                 maxPoolSize=10
             )
-            # Test connection
             await _mongo_client.admin.command('ping')
             _db = _mongo_client["razorbot"]
             print("✅ MongoDB connected successfully!")
@@ -157,9 +154,7 @@ async def ensure_user(user_id: int):
                 return
             except Exception as e:
                 print(f"MongoDB ensure_user error: {e}")
-                # Fall through to JSON
     
-    # JSON fallback
     data = _load_json_db()
     if str(user_id) not in data["users"]:
         data["users"][str(user_id)] = {
@@ -195,7 +190,6 @@ async def get_user_plan(user_id: int) -> str:
             except Exception as e:
                 print(f"MongoDB get_user_plan error: {e}")
     
-    # JSON fallback
     data = _load_json_db()
     user = data["users"].get(str(user_id), {})
     plan = user.get("plan", "Bronze")
@@ -237,7 +231,6 @@ async def set_user_plan(user_id: int, plan: str, days: int = 0):
             except Exception as e:
                 print(f"MongoDB set_user_plan error: {e}")
     
-    # JSON fallback
     data = _load_json_db()
     user = data["users"].get(str(user_id), {})
     user["plan"] = plan
@@ -290,7 +283,6 @@ async def save_card_to_db(card: str, status: str, response: str, gateway: str, p
     
     data = _load_json_db()
     data["cards"].append(card_data)
-    # Keep only last 10000 cards to prevent file bloat
     if len(data["cards"]) > 10000:
         data["cards"] = data["cards"][-10000:]
     _save_json_db(data)
@@ -614,7 +606,6 @@ async def generate_plan_code(plan_key: str, count: int = 1) -> List[str]:
             except:
                 pass
     
-    # JSON fallback
     data = _load_json_db()
     if "plan_codes" not in data:
         data["plan_codes"] = {}
@@ -675,7 +666,6 @@ async def redeem_plan_code(user_id: int, code: str) -> tuple:
             except:
                 pass
     
-    # JSON fallback
     data = _load_json_db()
     if code not in data.get("plan_codes", {}):
         return False, "invalid"
@@ -922,21 +912,6 @@ async def init_db():
     print("🔄 INITIALIZING DATABASE...")
     print("=" * 50)
     
-    # Try MongoDB if configured
-    if USE_MONGODB and MOTOR_AVAILABLE and MONGODB_URI:
-        try:
-            db = await get_mongo_db()
-            if db:
-                # Create indexes
-                await db.users.create_index("_id")
-                await db.cards.create_index("created_at")
-                await db.codes.create_index("used")
-                print("✅ MongoDB connected and ready!")
-                return True
-        except Exception as e:
-            print(f"❌ MongoDB initialization failed: {e}")
-            print("⚠️ Falling back to JSON storage...")
-    
     # JSON mode - ensure directory exists
     try:
         os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
@@ -952,6 +927,19 @@ async def init_db():
         global DB_FILE
         DB_FILE = "razor_bot_data.json"
         print(f"✅ Using fallback JSON storage at: {DB_FILE}")
+    
+    # Try MongoDB if configured (optional)
+    if USE_MONGODB and MOTOR_AVAILABLE and MONGODB_URI:
+        try:
+            db = await get_mongo_db()
+            if db:
+                await db.users.create_index("_id")
+                await db.cards.create_index("created_at")
+                await db.codes.create_index("used")
+                print("✅ MongoDB connected and ready!")
+        except Exception as e:
+            print(f"⚠️ MongoDB not available: {e}")
+            print("✅ Continuing with JSON storage only")
     
     print("=" * 50)
     return True

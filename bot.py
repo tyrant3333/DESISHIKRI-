@@ -99,7 +99,7 @@ def bs(text):
 # ====================== CONFIG ======================
 API_ID = int(os.getenv("API_ID", "26038836"))
 API_HASH = os.getenv("API_HASH", "25f462e2a8517df5014a653c39cc58ca")
-BOT_TOKEN = os.getenv("BOT_TOKEN", "8743588011:AAFKa-DmECawpthbzWwyRaSexdmP7CQvgIA")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8550493986:AAG2oasOdP_1Vlc3ojcKd-DyWCPxP_u1a7w")
 ADMIN_ID = json.loads(os.getenv("ADMIN_ID", "[7935621079]"))
 
 # ✅ UPDATED SHOPIFY API URL

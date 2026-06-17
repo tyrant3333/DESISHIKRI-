@@ -118,7 +118,7 @@ JOIN_CHANNEL_LINK = "https://t.me/freecheckout2026"
 
 # ── SEPARATE Worker Configuration (PER-USER) ──
 SP_PER_USER_WORKERS = 30
-MSP_PER_USER_WORKERS = 70
+MSP_PER_USER_WORKERS = 50
 RZ_PER_USER_WORKERS = 30
 MRZ_PER_USER_WORKERS = 50
 PP_PER_USER_WORKERS = 30      # PayPal single
@@ -130,7 +130,7 @@ BIN_WORKERS = 20
 # ── Timeout Configuration ──
 API_TIMEOUT = 60
 BIN_TIMEOUT = 60
-PROXY_TIMEOUT = 12
+PROXY_TIMEOUT = 20
 RZ_TIMEOUT = 60
 PP_TIMEOUT = 60               # PayPal timeout
 

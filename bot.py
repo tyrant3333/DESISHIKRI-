@@ -96,7 +96,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "8550493986:AAG2oasOdP_1Vlc3ojcKd-DyWCPxP_u1a
 ADMIN_ID = json.loads(os.getenv("ADMIN_ID", "[7935621079]"))
 
 # ✅ UPDATED SHOPIFY API ENDPOINT
-API_BASE_URL = os.getenv("API_BASE_URL", "https://afuonaa.up.railway.app/shopify")
+API_BASE_URL = os.getenv("API_BASE_URL", "https://web-production-669be.up.railway.app/shopify")
 RAZORPAY_API_URL = os.getenv("RAZORPAY_API_URL", "https://ravenxkiller.site/rz/r.php")
 PAYPAL_API_URL = os.getenv("PAYPAL_API_URL", "https://eliteccgate.vercel.app/paypal")
 

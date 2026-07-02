@@ -131,11 +131,10 @@ PROXY_PER_USER_WORKERS = 50
 BIN_WORKERS = 20
 
 # ── Timeout Configuration ──
-# Reduced API_TIMEOUT from 60 to 20 seconds for faster fail
-API_TIMEOUT = 20          # Shopify API timeout
+API_TIMEOUT = 60
 BIN_TIMEOUT = 60
 PROXY_TIMEOUT = 12
-RZ_TIMEOUT = 60           # RazorPay may need longer
+RZ_TIMEOUT = 60
 
 # ── General Settings ──
 BATCH_SIZE = 60
